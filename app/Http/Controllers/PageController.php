@@ -17,4 +17,8 @@ class PageController extends Controller
    public function userlist(){
     return view('pages.user');
    }
+
+   public function adduser(){
+    return view('pages.adduser');
+   }
 }

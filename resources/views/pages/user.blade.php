@@ -18,7 +18,7 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-xs-12">
-            <button class="btn btn-success"><i class="fa fa-plus"></i>Tambah User</button>
+            <a href="{{url('/user/add')}}" class="btn btn-success"><i class="fa fa-plus"></i>Tambah User</a>
         </div>
       </div>
       <!-- /.row -->
@@ -167,7 +167,14 @@
 
 @section('script')
 <!-- DataTables -->
-<script src="../../bower_components/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="../../bower_components/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+<script src="{{asset('assets/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#btn_tambah").click(function(){
+            $("#modal_baru").modal("show");
+        });
+    });
+</script>
 
 @endsection

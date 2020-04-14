@@ -7,10 +7,14 @@ use Illuminate\Http\Request;
 class PageController extends Controller
 {
    public function home(){
-       return view('layout.main');
+       return view('pages.home');
    }
 
    public function login(){
-       return view('layout.login');
+       return view('pages.login');
+   }
+
+   public function userlist(){
+    return view('pages.user');
    }
 }

@@ -17,3 +17,4 @@ Route::get('/', function () {
 
 Route::get('/home', 'PageController@home')->name('home');
 Route::get('/login', 'PageController@login')->name('login');
+Route::get('/user', 'PageController@userlist')->name('user');

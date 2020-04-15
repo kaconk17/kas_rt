@@ -1,0 +1,70 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\User;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Session;
+
+class UserController extends Controller
+{
+   public function postreg(Request $request){
+        $request->validate([
+            'nama' =>'required|min:3',
+            'password'=>'required|min:6',
+            'email'=>'required',
+            'telepon'=>'required|numeric|min:6',
+            'ktp'=>'required|numeric|min:6',
+            'tgl_lahir'=>'required|date',
+            'kelamin'=>'required',
+            'agama'=>'required',
+            'level'=>'required',
+        ]);
+
+        $user = new User();
+        $user->id = Str::uuid();
+        $user->nama = $request['nama'];
+        $user->email = $request['email'];
+        $user->password = Hash::make($request['password']);
+        $user->phone = $request['telepon'];
+        $user->jenis_kelamin = $request['kelamin'];
+        $user->alamat_asal = $request['alamat_asal'];
+        $user->alamat_sekarang = $request['alamat_sekarang'];
+        $user->tgl_lahir = $request['tgl_lahir'];
+        $user->pekerjaan = $request['pekerjaan'];
+        $user->no_ktp = $request['ktp'];
+        $user->agama = $request['agama'];
+        $user->level = $request['level'];
+        $saved = $user->save();
+
+        if (!$saved) {
+            Session::flash('alert-danger','Register gagal !'); 
+            return redirect()->route('user');
+        }
+        $user->rollApiKey();
+        Session::flash('alert-success','Register berhasil !'); 
+        return redirect()->route('user');
+   }
+
+   public function list(Request $request){
+
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
+
+    $Datas = User::all();
+
+    $count = User::count();
+
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
+
+   }
+}

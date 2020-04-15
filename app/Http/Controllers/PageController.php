@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PageController extends Controller
 {
@@ -15,6 +16,7 @@ class PageController extends Controller
    }
 
    public function userlist(){
+       
     return view('pages.user');
    }
 

@@ -25,7 +25,8 @@ class CreateUsersTable extends Migration
             $table->string('pekerjaan',50);
             $table->string('no_ktp',20);
             $table->string('agama',10);
-            $table->string('api_token');
+            $table->string('api_token')->nullable();
+            $table->string('level',10);
             $table->string('profile')->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');

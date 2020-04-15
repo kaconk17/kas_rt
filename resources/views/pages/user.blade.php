@@ -15,6 +15,19 @@
 
     <!-- Main content -->
     <section class="content">
+    @if(Session::has('alert-success'))
+    <div class="alert alert-success alert-dismissible">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-check"></i> Success!</h4>
+            {{Session::get('alert-success')}}
+        </div>
+      @elseif(Session::has('alert-danger'))
+        <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+            <h4><i class="icon fa fa-ban"></i> Gagal!</h4>
+            {{Session::get('alert-danger')}}
+        </div>
+    @endif
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-xs-12">
@@ -30,10 +43,11 @@
                     <h3 class="box-title">Hover Data Table</h3>
                     </div>
                     <!-- /.box-header -->
-                    <div class="box-body">
-                    <table id="tb_user" class="table table-bordered table-hover">
+                    <div class="box-body table-responsive">
+                    <table id="tb_user" class="table table-bordered table-hover text-nowrap">
                         <thead>
                         <tr>
+                        <th>Id</th>
                         <th>Nama</th>
                         <th>email</th>
                         <th>Phone</th>
@@ -44,8 +58,12 @@
                         <th>Pekerjaan</th>
                         <th>Agama</th>
                         <th>No. KTP</th>
+                        <th>Action</th>
                         </tr>
                         </thead>
+                        <tbody>
+                            
+                        </tbody>
                     </table>
                     </div>
                     <!-- /.box-body -->
@@ -57,29 +75,29 @@
     </section>
     <!-- /.content -->
 <!-- Modal -->
-<div class="modal fade" id="modal_baru" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Kredit Baru</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">Edit User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <form method="POST" action="{{ url('/postkredit') }}" enctype="multipart/form-data">
+      <form method="POST" action="{{ url('/postkredit') }}">
               @csrf
 
               <div class="form-group row">
-                  <label for="name" class="col-md-4 col-form-label text-md-right">{{ __('Judul') }}</label>
+                  <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Nama</label>
 
                   <div class="col-md-6">
-                      <input id="judul" type="text" class="form-control @error('judul') is-invalid @enderror" name="judul" value="{{ old('judul') }}" required autocomplete="judul" autofocus>
+                      <input id="edit-nama" type="text" class="form-control" name="edit-nama" value="{{ old('edit-nama') }}" required>
 
-                      @error('judul')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
+                      @error('edit-nama')
+                            <span class="help-block" role="alert">
+                                <strong class="text-red">{{ $message }}</strong>
+                            </span>
                       @enderror
                   </div>
               </div>
@@ -170,11 +188,53 @@
 <script src="{{asset('assets/datatables.net/js/jquery.dataTables.min.js')}}"></script>
 <script src="{{asset('assets/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
 <script type="text/javascript">
-    $(document).ready(function(){
-        $("#btn_tambah").click(function(){
-            $("#modal_baru").modal("show");
-        });
+$(document).ready(function(){
+        var tb_user =   $('#tb_user').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        responsive: true,
+        ordering: false,
+        ajax: {
+                        url: APP_URL+'/api/list_user',
+                        type: "POST",
+                        
+                        
+                    },
+        columnDefs:[
+            {
+                targets: [ 0 ],
+                visible: false,
+                searchable: false
+            },
+            {
+              targets: [11],
+              data: null,
+              defaultContent: "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
+            }
+        ],
+       
+        columns: [
+            { data: 'id', name: 'id' },
+            { data: 'nama', name: 'nama' },
+            { data: 'email', name: 'email' },
+            { data: 'phone', name: 'phone' },
+            { data: 'tgl_lahir', name: 'tgl_lahir' },
+            { data: 'jenis_kelamin', name: 'jenis_kelamin' },
+            { data: 'alamat_asal', name: 'alamat_asal' },
+            { data: 'alamat_sekarang', name: 'alamat_sekarang' },
+            { data: 'pekerjaan', name: 'pekerjaan' },
+            { data: 'agama', name: 'agama' },
+            { data: 'no_ktp', name: 'no_ktp' },
+           
+        ]
     });
+
+    $("#tb_user").on('click','.btn-success',function(){
+        var data = tb_user.row( $(this).parents('tr') ).data();
+        $("#edit_modal").modal("show");
+    });
+});
 </script>
 
 @endsection

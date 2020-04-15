@@ -268,6 +268,9 @@
 
 <!-- AdminLTE App -->
 <script src="{{asset('assets/LTE/js/adminlte.min.js')}}"></script>
+<script type="text/javascript">
+  var APP_URL = {!! json_encode(url('/')) !!}
+</script>
 
 @yield('script')
 </body>

@@ -19,3 +19,4 @@ Route::get('/home', 'PageController@home')->name('home');
 Route::get('/login', 'PageController@login')->name('login');
 Route::get('/user', 'PageController@userlist')->name('user');
 Route::get('/user/add', 'PageController@adduser')->name('adduser');
+Route::post('/postreg', 'UserController@postreg');

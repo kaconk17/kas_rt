@@ -30,7 +30,9 @@ class User extends Authenticatable
         'no_ktp',
         'agama',
         'profile',
+        'level',
     ];
+    public $incrementing = false;
 
     /**
      * The attributes that should be hidden for arrays.

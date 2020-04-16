@@ -67,4 +67,27 @@ class UserController extends Controller
     ];
 
    }
+
+   public function postedit(Request $request){
+
+        $user = User::find($request['id']);
+        $user->email = $request['email'];
+        $user->phone = $request['telepon'];
+        $user->no_ktp = $request['ktp'];
+        $user->alamat_asal = $request['alamat_asal'];
+        $user->alamat_sekarang = $request['alamat_sekarang'];
+        $user->pekerjaan = $request['pekerjaan'];
+        $user->level = $request['level'];
+
+        if ($user->isDirty()) {
+           
+            $user->save();
+            Session::flash('alert-success','Update berhasil !'); 
+        }else{
+            Session::flash('alert-danger','Data tidak diupdate !'); 
+        }
+
+        
+        return redirect()->route('user');
+   }
 }

@@ -92,6 +92,7 @@
                   <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Nama</label>
 
                   <div class="col-md-6">
+                      <input type="hidden" id="id-edit" name="id-edit">
                       <input id="edit-nama" type="text" class="form-control" name="edit-nama" value="{{ old('edit-nama') }}" required>
 
                       @error('edit-nama')
@@ -232,7 +233,7 @@ $(document).ready(function(){
 
     $("#tb_user").on('click','.btn-success',function(){
         var data = tb_user.row( $(this).parents('tr') ).data();
-        $("#edit_modal").modal("show");
+        window.location.href= "{{url('/user/edit')}}/"+data.id;
     });
 });
 </script>

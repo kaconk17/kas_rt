@@ -90,4 +90,46 @@ class UserController extends Controller
         
         return redirect()->route('user');
    }
+
+   public function postlogin(Request $request){
+    $this->validate($request, [
+        'email' => 'required|min:3',
+        'password' => 'required|min:6',
+    ]);
+
+    $data = User::where('email',$request['email'])->first();
+  
+    if ($data) {
+       if (Hash::check($request['password'],$data->password)) {
+        Session::put('name',$data->nama);
+        Session::put('id',$data->id);
+        Session::put('level',$data->level);
+        Session::put('login',true);
+        $request->session()->save();
+            $data->rollApiKey(); //Model Function
+
+            return array(
+                'user' => $data,
+                'token'=>base64_encode($data->api_token),
+                'message' => 'Authorization Successful!',
+                'success'=>true
+            );
+
+       }else{
+        
+        Session::flash('alert','Password atau email salah !'); 
+        return array(
+            'message' => 'Authorization failed!',
+            'success'=>false
+        );
+       
+       }
+    }else{
+        Session::flash('alert','Password atau email salah !'); 
+       return array(
+        'message' => 'Authorization failed!',
+        'success'=>false
+    );
+    }
+   }
 }

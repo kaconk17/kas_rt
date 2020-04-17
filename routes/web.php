@@ -15,8 +15,13 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/home', 'PageController@home')->name('home');
+Route::group(['middleware' => ['protect:admin,pengurus,user']], function () {
+
+    Route::get('/home', 'PageController@home')->name('home');
+});
+
 Route::get('/login', 'PageController@login')->name('login');
+Route::post('/postlogin', 'UserController@postlogin');
 Route::get('/user', 'PageController@userlist')->name('user');
 Route::get('/user/add', 'PageController@adduser')->name('adduser');
 Route::post('/postreg', 'UserController@postreg');

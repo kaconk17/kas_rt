@@ -4,12 +4,12 @@
   <!-- Content Header (Page header) -->
 <section class="content-header">
       <h1>
-        Users
-        <small>User Management</small>
+        KAS
+        <small>Kas Masuk</small>
       </h1>
       <ol class="breadcrumb">
         <li><a href="{{url('/')}}"><i class="fa fa-dashboard"></i> Home</a></li>
-        <li class="active">User</li>
+        <li class="active">Kas Masuk</li>
       </ol>
 </section>
 
@@ -31,7 +31,8 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-xs-12">
-            <a href="{{url('/user/add')}}" class="btn btn-success"><i class="fa fa-plus"></i>Tambah User</a>
+            
+            <button class="btn btn-success" data-toggle="modal" data-target="#tambah_modal"><i class="fa fa-plus"></i> Tambah Kas</button>
         </div>
       </div>
       <!-- /.row -->
@@ -44,7 +45,7 @@
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive">
-                    <table id="tb_user" class="table table-bordered table-hover text-nowrap">
+                    <table id="tb_iuran" class="table table-bordered table-hover text-nowrap">
                         <thead>
                         <tr>
                         <th>Id</th>
@@ -75,7 +76,7 @@
     </section>
     <!-- /.content -->
 <!-- Modal -->
-<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="tambah_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -185,87 +186,5 @@
 @endsection
 
 @section('script')
-<!-- DataTables -->
-<script src="{{asset('assets/datatables.net/js/jquery.dataTables.min.js')}}"></script>
-<script src="{{asset('assets/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
-<script type="text/javascript">
-$(document).ready(function(){
-    var key = localStorage.getItem('user_token');
-        var tb_user =   $('#tb_user').DataTable({
-        processing: true,
-        serverSide: true,
-        searching: true,
-        responsive: true,
-        ordering: false,
-        ajax: {
-                        url: APP_URL+'/api/list_user',
-                        type: "POST",
-                        headers: { "token_req": key },
-                        
-                    },
-        columnDefs:[
-            {
-                targets: [ 0 ],
-                visible: false,
-                searchable: false
-            },
-            {
-              targets: [11],
-              data: null,
-              defaultContent: "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
-            }
-        ],
-       
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'nama', name: 'nama' },
-            { data: 'email', name: 'email' },
-            { data: 'phone', name: 'phone' },
-            { data: 'tgl_lahir', name: 'tgl_lahir' },
-            { data: 'jenis_kelamin', name: 'jenis_kelamin' },
-            { data: 'alamat_asal', name: 'alamat_asal' },
-            { data: 'alamat_sekarang', name: 'alamat_sekarang' },
-            { data: 'pekerjaan', name: 'pekerjaan' },
-            { data: 'agama', name: 'agama' },
-            { data: 'no_ktp', name: 'no_ktp' },
-           
-        ]
-    });
-
-    $("#tb_user").on('click','.btn-success',function(){
-        var data = tb_user.row( $(this).parents('tr') ).data();
-        window.location.href= APP_URL+'/user/edit/'+data.id;
-    });
-
-    $("#tb_user").on('click','.btn-danger',function(){
-        var data = tb_user.row( $(this).parents('tr') ).data();
-        var r = confirm('Apakah anda akan menghapus '+data.nama+' ?');
-
-        if (r) {
-            $.ajax({
-            type: "POST",
-            url: APP_URL+"/user/delete",
-            headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
-            data:{"id": data.id} ,
-            dataType: "json",
-        })
-        .done(function(resp) {
-               if (resp.success) {
-                alert(resp.message);
-                window.location.href = "{{ route('user')}}";
-               }
-               else
-               alert(resp.message);
-               window.location.href = "{{ route('user')}}";
-           })
-           .fail(function() {
-               $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");
-            
-           });
-         
-        }
-    });
-});
-</script>
 
 @endsection

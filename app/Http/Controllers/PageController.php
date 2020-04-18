@@ -26,6 +26,7 @@ class PageController extends Controller
    }
 
    public function edituser($id){
+
        $user = User::find($id);
       
        $level[] = (object) ["key"=>"admin", "value"=>"Admin"];
@@ -35,4 +36,12 @@ class PageController extends Controller
       
     return view('pages.edituser',['user'=>$user, 'level'=>$level]);
    }
+
+  public function kasmasuk(){
+      return view('pages.kasmasuk');
+  }
+
+  public function kaskeluar(){
+    return view('pages.kaskeluar');
+}
 }

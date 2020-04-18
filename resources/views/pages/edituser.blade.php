@@ -51,7 +51,7 @@
                       </div>
                       <div class="form-group col col-md-4">
                         <label for="exampleInputPassword1">Password</label> <br>
-                        <button class="btn btn-warning"><i class="fa fa-warning"></i> Ganti Password</button>
+                        <button type="button" class="btn btn-warning" id="btn-password"><i class="fa fa-warning"></i> Reset Password</button>
                       </div>
 
                   </div>
@@ -142,4 +142,74 @@
     </section>
     <!-- /.content -->
 
-    @endsection
+    <!-- Modal -->
+<div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Reset Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      <form action="{{url('/user/passupdate')}}" method="POST" id="form-password">
+        @csrf
+          <div class="row">
+            <div class="col col-md-3"><label>Password Baru :</label></div>
+            <div class="col col-md-4">
+             <input type="password" name="edit-pass" id="edit-pass" required>
+          <input type="hidden" id="edit-id" name="edit-id" value="{{$user->id}}">
+            </div>
+          </div>
+          
+     </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" id="btn-update">Update</button>
+      </div>
+    </div>
+    </form>
+  </div>
+</div>
+
+@endsection
+
+@section('script')
+<script type="text/javascript">
+$(document).ready(function(){
+  $("#btn-password").click(function(){
+    $("#edit-modal").modal("show");
+  });
+
+  $("#form-password").submit(function(e){
+    e.preventDefault();
+    var n = $("#edit-pass").val();
+    var data = $(this).serialize();
+    if (n.length >= 6) {
+      $.ajax({
+            type: "POST",
+            url: APP_URL+"/user/passupdate",
+            data:data,
+            dataType: "json",
+        })
+        .done(function(resp) {
+               if (resp.success) {
+                alert(resp.message);
+                location.reload();
+               }
+               else
+               alert(resp.message);
+               
+           })
+           .fail(function() {
+               $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");
+            
+           });
+    }else{
+      alert("Panjang Password Min : 6 Char !");
+    }
+  });
+});
+</script>
+@endsection

@@ -17,4 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/list_user', 'UserController@list');
+Route::middleware('ApiToken')->group(function () {
+    Route::post('/list_user', 'UserController@list');
+
+});

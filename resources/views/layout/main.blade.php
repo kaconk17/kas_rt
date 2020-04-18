@@ -88,7 +88,7 @@
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
               <img src="{{asset('assets/img/user.png')}}" class="user-image" alt="User Image">
-              <span class="hidden-xs">Alexander</span>
+              <span class="hidden-xs">{{Session::get('name')}}</span>
             </a>
             <ul class="dropdown-menu">
               <!-- User image -->
@@ -96,32 +96,23 @@
                 <img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="User Image">
 
                 <p>
-                  Alexander Pierce - Web Developer
-                  <small>Member since Nov. 2012</small>
+                  {{Session::get('name')}}
+                 
                 </p>
               </li>
               <!-- Menu Body -->
               <li class="user-body">
-                <div class="row">
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Followers</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Sales</a>
-                  </div>
-                  <div class="col-xs-4 text-center">
-                    <a href="#">Friends</a>
-                  </div>
-                </div>
+               
                 <!-- /.row -->
               </li>
               <!-- Menu Footer-->
               <li class="user-footer">
                 <div class="pull-left">
-                  <a href="#" class="btn btn-default btn-flat">Profile</a>
+                  <a href="{{url('/profile')}}" class="btn btn-default btn-flat">Profile</a>
                 </div>
                 <div class="pull-right">
-                  <a href="#" class="btn btn-default btn-flat">Sign out</a>
+                <meta name="csrf-token" content="{{ csrf_token() }}">
+                  <a href="#" id="logout" class="btn btn-block btn-primary"><i class="fa fa-sign-out"></i> Sign out</a>
                 </div>
               </li>
             </ul>
@@ -141,7 +132,7 @@
           <img src="{{asset('assets/img/user.png')}}" class="img-circle" alt="User Image">
         </div>
         <div class="pull-left info">
-          <p>Alexander Pierce</p>
+          <p>{{Session::get('name')}}</p>
          
         </div>
       </div>
@@ -149,8 +140,8 @@
       <!-- sidebar menu: : style can be found in sidebar.less -->
       <ul class="sidebar-menu" data-widget="tree">
         <li class="header">MAIN NAVIGATION</li>
-        <li class="active treeview">
-          <a href="#">
+        <li class="{{ Request::is('home') ? 'active' : '' }}">
+          <a href="{{url('/home')}}">
             <i class="fa fa-dashboard"></i> <span>Dashboard</span>
            
           </a>
@@ -160,75 +151,31 @@
         <li class="treeview">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
-            <span>Charts</span>
+            <span>Kas</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="pages/charts/chartjs.html"><i class="fa fa-circle-o"></i> ChartJS</a></li>
-            <li><a href="pages/charts/morris.html"><i class="fa fa-circle-o"></i> Morris</a></li>
-            <li><a href="pages/charts/flot.html"><i class="fa fa-circle-o"></i> Flot</a></li>
-            <li><a href="pages/charts/inline.html"><i class="fa fa-circle-o"></i> Inline charts</a></li>
+            <li><a href="{{url('/kas/masuk')}}"><i class="fa fa-plus"></i> Kas Masuk</a></li>
+            <li><a href="{{url('/kas/keluar')}}"><i class="fa fa-cart-plus"></i> Kas Keluar</a></li>
+            <li><a href="#"><i class="fa fa-bar-chart"></i> Laporan Kas</a></li>
           </ul>
         </li>
+       
         <li class="treeview">
-          <a href="#">
-            <i class="fa fa-laptop"></i>
-            <span>UI Elements</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/UI/general.html"><i class="fa fa-circle-o"></i> General</a></li>
-            <li><a href="pages/UI/icons.html"><i class="fa fa-circle-o"></i> Icons</a></li>
-            <li><a href="pages/UI/buttons.html"><i class="fa fa-circle-o"></i> Buttons</a></li>
-            <li><a href="pages/UI/sliders.html"><i class="fa fa-circle-o"></i> Sliders</a></li>
-            <li><a href="pages/UI/timeline.html"><i class="fa fa-circle-o"></i> Timeline</a></li>
-            <li><a href="pages/UI/modals.html"><i class="fa fa-circle-o"></i> Modals</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-edit"></i> <span>Forms</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/forms/general.html"><i class="fa fa-circle-o"></i> General Elements</a></li>
-            <li><a href="pages/forms/advanced.html"><i class="fa fa-circle-o"></i> Advanced Elements</a></li>
-            <li><a href="pages/forms/editors.html"><i class="fa fa-circle-o"></i> Editors</a></li>
-          </ul>
-        </li>
-        <li class="treeview">
-          <a href="#">
-            <i class="fa fa-table"></i> <span>Tables</span>
-            <span class="pull-right-container">
-              <i class="fa fa-angle-left pull-right"></i>
-            </span>
-          </a>
-          <ul class="treeview-menu">
-            <li><a href="pages/tables/simple.html"><i class="fa fa-circle-o"></i> Simple tables</a></li>
-            <li><a href="pages/tables/data.html"><i class="fa fa-circle-o"></i> Data tables</a></li>
-          </ul>
-        </li>
-        <li class="treeview active menu-open">
           <a href="pages/calendar.html">
             <i class="fa fa-calendar"></i> <span>Calendar</span>
-            <span class="pull-right-container">
-              <small class="label pull-right bg-red">3</small>
-              <small class="label pull-right bg-blue">17</small>
-            </span>
+           
           </a>
         </li>
-        <li class="active">
+        @if (Session::get('level')=='admin')
+        <li class="{{ Request::is('user') ? 'active' : '' }}">
           <a href="{{url('/user')}}">
             <i class="fa fa-user"></i> <span>User Management</span>
           </a>
         </li>
-       
+       @endif
     
        
       </ul>
@@ -269,8 +216,38 @@
 
 <!-- AdminLTE App -->
 <script src="{{asset('assets/LTE/js/adminlte.min.js')}}"></script>
+<script src="{{asset('assets/script/aplikasi.js')}}"></script>
 <script type="text/javascript">
   var APP_URL = {!! json_encode(url('/')) !!}
+</script>
+
+<script type="text/javascript">
+  $("#logout").click(function(event) {
+	event.preventDefault();
+  var user = localStorage.getItem('user_id');
+  $.ajax({
+        url: APP_URL+'/logout',
+        type: 'POST',
+        dataType: 'json',
+        headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+        data: {id : user},
+    })
+    .done(function(resp) {
+        if (resp.success) {
+          localStorage.removeItem('user_name');
+          localStorage.removeItem('user_token');
+          localStorage.removeItem('user_id');
+          window.location.href = "{{ route('login')}}";
+			    
+        }
+        else
+        alert('Gagal logout !');
+    })
+    .fail(function() {
+        $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");
+    });
+  
+});
 </script>
 
 @yield('script')

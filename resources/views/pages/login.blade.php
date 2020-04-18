@@ -99,7 +99,7 @@
                if (resp.success) {
                  localStorage.setItem('user_token',resp.token);
                  localStorage.setItem('user_name',resp.user.nama);
-                localStorage.setItem('user_id_user',resp.user.id);
+                localStorage.setItem('user_id',resp.user.id);
                  
              window.location.href = "{{ route('home')}}";
                }

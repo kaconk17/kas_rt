@@ -55,9 +55,17 @@ class UserController extends Controller
     $start = (int) $request->input("start");
     $length = (int) $request->input("length");
 
-    $Datas = User::all();
+    $Datas = User::where('nama','like','%'.$search.'%')
+                    ->orWhere('email','like','%'.$search.'%')
+                    ->skip($start)
+                    ->take($length)
+                    ->get();
 
-    $count = User::count();
+    $count = User::where('nama','like','%'.$search.'%')
+                    ->orWhere('email','like','%'.$search.'%')
+                    ->skip($start)
+                    ->take($length)
+                    ->count();
 
     return  [
         "draw" => $draw,
@@ -92,10 +100,7 @@ class UserController extends Controller
    }
 
    public function postlogin(Request $request){
-    $this->validate($request, [
-        'email' => 'required|min:3',
-        'password' => 'required|min:6',
-    ]);
+    
 
     $data = User::where('email',$request['email'])->first();
   
@@ -132,4 +137,54 @@ class UserController extends Controller
     );
     }
    }
+
+   public function logout(Request $request){
+    $request->session()->invalidate();
+   
+    return array(
+        
+        'message' => 'Logout Successful!',
+        'success'=>true
+    );
+   }
+
+   public function delete(Request $request){
+        $user = User::find($request['id'])->delete();
+
+        if ($user) {
+           $pesan = 'Hapus Data Berhasil !';
+           $res = true;
+        }else{
+            $pesan = 'Hapus Data Gagal !';
+           $res = false;
+        }
+
+        return array(
+        
+            'message' => $pesan,
+            'success'=>$res
+        );
+
+    }
+
+    public function passupdate(Request $request){
+        $user = User::find($request['edit-id']);
+
+        $user->password = Hash::make($request['edit-pass']);
+
+        if ($user->isDirty()) {
+            $user->save();
+            $pesan = 'Reset Password Berhasil !';
+           $res = true;
+        }else{
+            $pesan = 'Reset Password Gagal !';
+            $res = false;
+        }
+
+        return array(
+        
+            'message' => $pesan,
+            'success'=>$res
+        );
+    }
 }

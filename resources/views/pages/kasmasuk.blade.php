@@ -75,116 +75,129 @@
 
     </section>
     <!-- /.content -->
+
 <!-- Modal -->
 <div class="modal fade" id="tambah_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Edit User</h5>
+        <h5 class="modal-title" id="exampleModalLongTitle">Kas Masuk</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-      <form method="POST" action="{{ url('/postkredit') }}">
-              @csrf
-
-              <div class="form-group row">
-                  <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Nama</label>
-
-                  <div class="col-md-6">
-                      <input type="hidden" id="id-edit" name="id-edit">
-                      <input id="edit-nama" type="text" class="form-control" name="edit-nama" value="{{ old('edit-nama') }}" required>
-
-                      @error('edit-nama')
-                            <span class="help-block" role="alert">
-                                <strong class="text-red">{{ $message }}</strong>
-                            </span>
-                      @enderror
-                  </div>
+      <form id="form_masuk" method="POST">
+         @csrf
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Nama : </label></div>
+              <div class="col col-md-4">
+                 <select name="nama" id="nama" class="form-control select2" required>
+                    <option value="">---Pilih Nama----</option>
+                    @foreach ($user as $y)
+                    <option value="{{$y->id}}">{{$y->nama}}</option>
+                    @endforeach
+                </select>
               </div>
-              <div class="form-group row">
-                  <label for="harga" class="col-md-4 col-form-label text-md-right">{{ __('Harga') }}</label>
-
-                  <div class="col-md-6">
-                      <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('harga') }}" required autocomplete="harga" autofocus>
-
-                      @error('harga')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
+          </div>
+       
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Tanggal :</label></div>
+            <div class="col col-md-4">
+              <input type="date" class="form-control" name="tanggal" id="tanggal" required>
+            </div>
+          </div>
+         
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Jenis :</label></div>
+            <div class="col col-md-4">
+              <select name="jenis" id="jenis" class="form-control" required>
+                <option value="">--Pilih Jenis--</option>
+                <option value="iuran_ditempati">Iuran Ditemapti</option>
+                <option value="iuran_tidak_ditempati">Iuran Tidak ditempati</option>
+                <option value="sumbangan">Sumbangan</option>
+                <option value="lain_lain">Lain-lain</option>
+              </select>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Jumlah :</label></div>
+            <div class="col col-md-4">
+                <div class="input-group">
+                  <div class="input-group-addon">
+                    <i>Rp</i>
                   </div>
-              </div>
-
-              <div class="form-group row">
-                  <label for="bunga" class="col-md-4 col-form-label text-md-right">{{ __('Bunga Kredit') }}</label>
-
-                  <div class="col-md-3">
-                   
-                      <input id="bunga" type="number" class="form-control @error('bunga') is-invalid @enderror" name="bunga" value="{{ old('bunga') }}" required autocomplete="bunga" autofocus>
-                   
-                      @error('bunga')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
-                  </div>
-                  <label for="">%</label>
-              </div>
-
-              <div class="form-group row">
-                  <label for="desk" class="col-md-4 col-form-label text-md-right">{{ __('Deskripsi') }}</label>
-
-                  <div class="col-md-6">
-                  <textarea name="desk" id="desk" cols="30" rows="10" class="form-control @error('desk') is-invalid @enderror" name="desk" value="{{ old('desk') }}" required></textarea>
-                      
-
-                      @error('desk')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
-                  </div>
-              </div>
-
-              <div class="form-group row">
-                  <label for="desk" class="col-md-4 col-form-label text-md-right">{{ __('Gambar') }}</label>
-
-                  <div class="col-md-6">
-                  <input type="file" name="gambar" >
-                      
-
-                      @error('desk')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
-                  </div>
-              </div>
-              
-              <div class="form-group row">
-                  <label for="public" class="col-md-4 col-form-label text-md-right">{{ __('Post') }}</label>
-
-                  <div class="col-md-6">
-                    <div class="form-check form-check-inline">
-                        <input type="hidden" name= "public" value="FALSE">
-                        <input class="form-check-input @error('public') is-invalid @enderror" type="checkbox" name="public" id="public" value="TRUE">
-                        <label class="form-check-label" for="laki">Set Public</label>
-                    </div>
-                  </div>
-              </div>
-      </div>
+                  <input type="number" name="jumlah" id="jumlah" class="form-control" required>
+                </div>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Periode :</label></div>
+            <div class="col col-md-4">
+                <input type="month" name="periode" id="periode" required>
+            </div>
+          </div>
+          <div class="row form-group">
+            <div class="col col-md-3"><label>Keterangan :</label></div>
+            <div class="col col-md-6">
+             <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5">
+             </textarea>
+            </div>
+          </div>
+     </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+        <button type="submit" class="btn btn-primary" id="btn-save">Simpan</button>
       </div>
-      </form>
     </div>
+    </form>
   </div>
 </div>
 @endsection
 
 @section('script')
-
+<script src="{{asset('assets/select2/js/select2.full.min.js')}}"></script>
+<script>
+    $(function(){
+        $("#nama").select2()
+    });
+</script>
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#form_masuk").submit(function(e){
+        e.preventDefault();
+        var datas = $(this).serialize();
+        var btn = $("#btn-save");
+        btn.html('Simpan');
+        btn.attr('disabled', true);
+        //alert('test');
+        
+    $.ajax({
+        url: APP_URL+'/postmasuk',
+        type: 'POST',
+        dataType: 'json',
+        data: datas,
+    })
+    .done(function(resp) {
+        if (resp.success) {
+	       
+			//window.location.href = "{{ route('masuk')}}";
+        }
+        else
+        $("#error").html("<div class='alert alert-danger'><div>Error</div></div>");
+    })
+    .fail(function() {
+        $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");
+ 		//toastr['warning']('Tidak dapat terhubung ke server !!!');
+    })
+    .always(function() {
+        btn.html('Simpan');
+        btn.attr('disabled', false);
+    });
+    
+    return false;
+    });
+    
+});
+</script>
 @endsection

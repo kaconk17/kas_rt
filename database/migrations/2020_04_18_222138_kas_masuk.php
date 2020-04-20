@@ -20,7 +20,7 @@ class KasMasuk extends Migration
             $table->uuid('id_warga');
             $table->foreign('id_warga')->references('id')->on('users');
             $table->date('tgl_bayar');
-            $table->string('jenis', 10);
+            $table->string('jenis', 50);
             $table->decimal('jumlah',18,2);
             $table->string('periode',10);
             $table->string('keterangan',100)->nullable();

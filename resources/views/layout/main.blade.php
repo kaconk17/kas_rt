@@ -16,6 +16,7 @@
   <link rel="stylesheet" href="{{asset('assets/LTE/css/AdminLTE.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/LTE/css/skin-black.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">
+  <link rel="stylesheet" href="{{asset('assets/select2/css/select2.min.css')}}">
   
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 </head>

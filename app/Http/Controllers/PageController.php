@@ -38,7 +38,8 @@ class PageController extends Controller
    }
 
   public function kasmasuk(){
-      return view('pages.kasmasuk');
+      $users = User::all();
+      return view('pages.kasmasuk',['user'=>$users]);
   }
 
   public function kaskeluar(){

@@ -15,8 +15,8 @@ class UsersTableSeeder extends Seeder
     {
         \App\User::create([
             'id'=> Str::uuid(),
-        'nama' => 'admin2',
-        'email' => 'admin2@gmail.com',
+        'nama' => 'admin',
+        'email' => 'admin@gmail.com',
         'password' => Hash::make('123456'),
         'phone' => '0033344555',
        'jenis_kelamin' => 'L',

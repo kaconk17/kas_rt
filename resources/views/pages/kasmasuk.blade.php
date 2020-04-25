@@ -140,8 +140,7 @@
           <div class="row form-group">
             <div class="col col-md-3"><label>Keterangan :</label></div>
             <div class="col col-md-6">
-             <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5">
-             </textarea>
+             <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="5" placeholder="Keterangan"></textarea>
             </div>
           </div>
      </div>
@@ -180,11 +179,12 @@ $(document).ready(function(){
     })
     .done(function(resp) {
         if (resp.success) {
-	       
-			//window.location.href = "{{ route('masuk')}}";
+	       alert(resp.message);
+			window.location.href = "{{ route('masuk')}}";
         }
         else
-        $("#error").html("<div class='alert alert-danger'><div>Error</div></div>");
+        alert(resp.message);
+        //$("#error").html("<div class='alert alert-danger'><div>Error</div></div>");
     })
     .fail(function() {
         $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");

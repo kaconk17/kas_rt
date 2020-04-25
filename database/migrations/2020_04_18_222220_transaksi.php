@@ -19,8 +19,8 @@ class Transaksi extends Migration
             $table->foreign('id_masuk')->references('id_masuk')->on('kas_masuk')->onDelete('cascade');
             $table->uuid('id_keluar')->nullable();
             $table->foreign('id_keluar')->references('id_keluar')->on('kas_keluar')->onDelete('cascade');
-            $table->string('jenis', 10);
-            $table->date('tgl_keluar');
+            $table->string('jenis', 50);
+            $table->date('tgl_transaksi');
             $table->decimal('jumlah',18,2);
             $table->string('periode',10);    
             $table->string('keterangan',100)->nullable();

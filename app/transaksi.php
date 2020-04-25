@@ -11,7 +11,7 @@ class transaksi extends Model
         'id_masuk',
         'id_keluar',
         'jenis',
-        'tgl_keluar',
+        'tgl_transaksi',
         'jumlah',
         'periode',
         'keterangan',

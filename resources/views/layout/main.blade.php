@@ -149,7 +149,7 @@
         </li>
         
        
-        <li class="treeview">
+        <li class="treeview {{ Request::is('kas/*') ? 'active' : '' }}">
           <a href="#">
             <i class="fa fa-pie-chart"></i>
             <span>Kas</span>
@@ -158,9 +158,9 @@
             </span>
           </a>
           <ul class="treeview-menu">
-            <li><a href="{{url('/kas/masuk')}}"><i class="fa fa-plus"></i> Kas Masuk</a></li>
-            <li><a href="{{url('/kas/keluar')}}"><i class="fa fa-cart-plus"></i> Kas Keluar</a></li>
-            <li><a href="#"><i class="fa fa-bar-chart"></i> Laporan Kas</a></li>
+            <li class="{{ Request::is('kas/masuk') ? 'active' : '' }}"><a href="{{url('/kas/masuk')}}"><i class="fa fa-plus"></i> Kas Masuk</a></li>
+            <li class="{{ Request::is('kas/keluar') ? 'active' : '' }}"><a href="{{url('/kas/keluar')}}"><i class="fa fa-cart-plus"></i> Kas Keluar</a></li>
+            <li class="{{ Request::is('kas/laporan') ? 'active' : '' }}"><a href="#"><i class="fa fa-bar-chart"></i> Laporan Kas</a></li>
           </ul>
         </li>
        

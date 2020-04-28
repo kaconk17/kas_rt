@@ -8,13 +8,14 @@ use App\masuk;
 use App\transaksi;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\DB;
 
 class KasController extends Controller
 {
    public function postmasuk(Request $request){
-      
+     
        $id = Str::uuid();
-
+        
        $masuk = masuk::create([
             'id_masuk'=>$id,
             'id_input'=>Session::get('id'),
@@ -48,5 +49,24 @@ class KasController extends Controller
             'success'=>false
         );
        }
+   }
+
+   public function listiuran(Request $request){
+
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
+    
+    $Datas = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id");
+
+    $rows = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id");
+    $count = count($rows);
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
    }
 }

@@ -46,15 +46,15 @@
                         <form class="form-horizontal">
                             <div class="form-group">
                                 <label for="tgl-awal" class="col-sm-2 control-label">Perode :</label>
-                                <div class="col-sm-2">
-                                    <input type="date" class="form-control" name="tgl-awal" id="tgl-awal">
+                                <div class="col-sm-3">
+                                    <input type="date" class="form-control" name="tgl-awal" id="tgl-awal" value="{{date('Y-m').'-01'}}">
                                 </div>
                                 <label for="tgl-akhir" class="col-sm-2 control-label">Sampai</label>
-                                <div class="col-sm-2">
-                                    <input type="date" class="form-control" name="tgl-akhir" id="tgl-akhir">
+                                <div class="col-sm-3">
+                                    <input type="date" class="form-control" name="tgl-akhir" id="tgl-akhir" value="{{date('Y-m-d')}}">
                                 </div>
                                 <div class="col-sm-2">
-                                <button class="btn btn-primary" id="btn-reload"><i class="fa fa-refresh"></i> Reload</button>
+                                <button type="button" class="btn btn-primary" id="btn-reload"><i class="fa fa-refresh"></i> Reload</button>
                                 </div>
                             </div>
                         </form>
@@ -179,6 +179,8 @@
 <script type="text/javascript">
 $(document).ready(function(){
     var key = localStorage.getItem('user_token');
+    var awal = $("#tgl-awal").val();
+    var akhir = $("#tgl-akhir").val();
 
     var tb_masuk =   $('#tb_iuran').DataTable({
         processing: true,
@@ -190,6 +192,10 @@ $(document).ready(function(){
                         url: APP_URL+'/api/listiuran',
                         type: "POST",
                         headers: { "token_req": key },
+                        data: function(d){
+                            d.tgl_awal = $("#tgl-awal").val();
+                            d.tgl_akhir = $("#tgl-akhir").val();
+                        }
                         
                     },
         columnDefs:[
@@ -219,9 +225,10 @@ $(document).ready(function(){
     });
 
     $("#btn-reload").click(function(){
-        
+        var date1 = $("#tgl-awal").val();
+        var date2 = $("#tgl-akhir").val();
+        tb_masuk.ajax.reload();
     });
-    
 
     $("#form_masuk").submit(function(e){
         
@@ -260,46 +267,5 @@ $(document).ready(function(){
     });
     
 });
-
-function load_table(tgl_awal, tgl_akhir, key){
-   
-        var tb_masuk =   $('#tb_iuran').DataTable({
-        processing: true,
-        serverSide: true,
-        searching: true,
-        responsive: true,
-        ordering: false,
-        ajax: {
-                        url: APP_URL+'/api/listiuran',
-                        type: "POST",
-                        headers: { "token_req": key },
-                        
-                    },
-        columnDefs:[
-            {
-                targets: [ 0 ],
-                visible: false,
-                searchable: false
-            },
-            {
-              targets: [8],
-              data: null,
-              defaultContent: "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
-            }
-        ],
-       
-        columns: [
-            { data: 'id', name: 'id' },
-            { data: 'tgl_bayar', name: 'tgl_bayar' },
-            { data: 'nama', name: 'nama' },
-            { data: 'jenis', name: 'jenis' },
-            { data: 'jumlah', name: 'jumlah' },
-            { data: 'periode', name: 'periode' },
-            { data: 'nama_input', name: 'nama_input' },
-            { data: 'keterangan', name: 'keterangan' },
-           
-        ]
-    });
-}
 </script>
 @endsection

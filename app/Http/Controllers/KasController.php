@@ -52,15 +52,17 @@ class KasController extends Controller
    }
 
    public function listiuran(Request $request){
-
+   
     $draw = $request->input("draw");
     $search = $request->input("search")['value'];
     $start = (int) $request->input("start");
     $length = (int) $request->input("length");
-    
-    $Datas = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id");
+    $awal = $request->input("tgl_awal");
+    $akhir = $request->input("tgl_akhir");
 
-    $rows = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id");
+    $Datas = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id where a.tgl_bayar >= '$awal' and a.tgl_bayar <= '$akhir'");
+
+    $rows = DB::select("select a.*, b.nama as nama_input, c.nama as nama from kas_masuk a join users b on a.id_input = b.id join users c on a.id_warga = c.id where a.tgl_bayar >= '$awal' and a.tgl_bayar <= '$akhir'");
     $count = count($rows);
     return  [
         "draw" => $draw,

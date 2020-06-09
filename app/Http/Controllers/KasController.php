@@ -71,4 +71,49 @@ class KasController extends Controller
         "data" => $Datas
     ];
    }
+
+   public function delete_masuk(Request $request){
+        $id = $request['id'];
+        $token = $request->header('token_req');
+
+        $user = User::where('api_token',base64_decode($token))->first();
+
+        if($user->level == 'admin'){
+            $masuk = masuk::find($id);
+            if($masuk->tgl_closing != null){
+               
+                $mess = 'Hapus data gagal !';
+                $status = false;
+            }else{
+
+                $masuk->delete();
+                $mess = 'Hapus data berhasil !';
+                $status = true;
+            }
+        }else{
+            $mess = 'Hapus data gagal !';
+            $status = false;
+        }
+        return array(
+            'message' => $mess,
+            'success'=>$status
+        );
+   }
+
+   public function edit_masuk(Request $request){
+    $id = Session::get('id');
+
+        $user = User::find($id);
+
+        if ($user->level == 'Admin') {
+           
+        }else{
+            $mess = 'Edit data gagal !';
+            $status = false;
+        }
+        return array(
+            'message' => $mess,
+            'success'=>$status
+        );
+   }
 }

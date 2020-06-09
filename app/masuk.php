@@ -15,6 +15,7 @@ class masuk extends Model
         'jumlah',
         'periode',
         'keterangan',
+        'tgl_closing',
         
     ];
 

@@ -24,6 +24,7 @@ class KasMasuk extends Migration
             $table->decimal('jumlah',18,2);
             $table->string('periode',10);
             $table->string('keterangan',100)->nullable();
+            $table->date('tgl_closing')->nullable();
             $table->timestamps();
         });
     }

@@ -183,7 +183,7 @@
           <div class="row form-group">
             <div class="col col-md-3"><label>Nama : </label></div>
               <div class="col col-md-4">
-              <input type="hidden" id="edit_id">
+              <input type="hidden" id="edit_id" name="edit_id">
                 <label id="nama_edit"></label>
               </div>
           </div>
@@ -392,7 +392,7 @@ $("#form_edit").submit(function(e){
   action_data(APP_URL+"/masuk/edit", d, _key).done(function(resp){
           if (resp.success) {
             alert(resp.message);
-          
+            window.location.href = "{{ route('masuk')}}";
           }else{
             alert(resp.message);
           }

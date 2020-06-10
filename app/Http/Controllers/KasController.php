@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use App\masuk;
 use App\transaksi;
+use App\LogModel;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
@@ -101,12 +102,35 @@ class KasController extends Controller
    }
 
    public function edit_masuk(Request $request){
-    $id = Session::get('id');
-
+      
+        $id = Session::get('id');
         $user = User::find($id);
+        $kas = masuk::find($request['edit_id']);
 
-        if ($user->level == 'Admin') {
-           
+        if ($user->level == 'admin' && $kas->tgl_closing == null) {
+           $kas->jenis = $request['edit_jenis'];
+           $kas->jumlah = $request['edit_jumlah'];
+           $kas->keterangan = $request['edit_keterangan'];
+           $message ="update: kas_masuk, ID : ".$request['edit_id'];
+           if ($kas->isDirty('jenis')) {
+               $message = $message.",jenis: ".$request['edit_jenis'];
+           }
+           if ($kas->isDirty('jumlah')) {
+            $message = $message.",jumlah: ".$request['edit_jumlah'];
+           }
+           if ($kas->isDirty('keterangan')) {
+            $message = $message.",keterangan: ".$request['edit_keterangan'];
+           }
+           $kas->save();
+           $mess = 'Edit data berhasil !';
+            $status = true;
+            $data = [
+                'id_log' => Str::uuid(),
+                'id_user' => $id,
+                'activity' =>"update",
+                'message' => $message,
+            ];
+            LogModel::create($data);
         }else{
             $mess = 'Edit data gagal !';
             $status = false;

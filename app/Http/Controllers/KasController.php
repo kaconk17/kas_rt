@@ -140,4 +140,26 @@ class KasController extends Controller
             'success'=>$status
         );
    }
+
+   //======================kas keluar===================================
+
+   public function listkeluar(Request $request){
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
+    $awal = $request->input("tgl_awal");
+    $akhir = $request->input("tgl_akhir");
+
+    $Datas = DB::select("select a.*, b.nama as nama from kas_keluar a join users b on a.id_input = b.id where a.tgl_keluar >= '$awal' and a.tgl_keluar <= '$akhir'");
+
+    $rows = DB::select("select a.*, b.nama as nama from kas_keluar a join users b on a.id_input = b.id where a.tgl_keluar >= '$awal' and a.tgl_keluar <= '$akhir'");
+    $count = count($rows);
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
+   }
 }

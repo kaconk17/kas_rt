@@ -33,7 +33,7 @@
         <div class="col-xs-12">
             
             <button class="btn btn-success" data-toggle="modal" data-target="#tambah_modal"><i class="fa fa-plus"></i> Tambah Kas</button>
-        </div>
+          </div>
       </div>
       <!-- /.row -->
       <!-- Main row -->

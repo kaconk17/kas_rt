@@ -31,7 +31,8 @@
       <!-- Small boxes (Stat box) -->
       <div class="row">
         <div class="col-xs-12">
-            <a href="{{url('/user/add')}}" class="btn btn-success"><i class="fa fa-plus"></i> Tambah Kas</a>
+            
+            <button class="btn btn-danger" id="btn_tmbh"><i class="fa fa-plus"></i> Tambah Pengeluaran</button>
             
         </div>
       </div>
@@ -41,31 +42,42 @@
         <div class="col-xs-12">
             <div class="box">
                     <div class="box-header">
-                    <h3 class="box-title">Hover Data Table</h3>
+                    <h3 class="box-title">Daftar Pengeluaran Kas</h3>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label for="tgl-awal" class="col-sm-2 control-label">Perode :</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="tgl-awal" id="tgl-awal" value="{{date('Y-m').'-01'}}">
+                            </div>
+                            <label for="tgl-akhir" class="col-sm-2 control-label">Sampai</label>
+                            <div class="col-sm-3">
+                                <input type="date" class="form-control" name="tgl-akhir" id="tgl-akhir" value="{{date('Y-m-d')}}">
+                            </div>
+                            <div class="col-sm-2">
+                            <button type="button" class="btn btn-primary" id="btn-reload"><i class="fa fa-refresh"></i> Reload</button>
+                            </div>
+                        </div>
+                    </form>
                     </div>
                     <!-- /.box-header -->
                     <div class="box-body table-responsive">
-                    <table id="tb_iuran" class="table table-bordered table-hover text-nowrap">
-                        <thead>
-                        <tr>
-                        <th>Id</th>
-                        <th>Nama</th>
-                        <th>email</th>
-                        <th>Phone</th>
-                        <th>Tgl Lahir</th>
-                        <th>Jenis Kelamin</th>
-                        <th>Alamat Asal</th>
-                        <th>Alamat Sekarang</th>
-                        <th>Pekerjaan</th>
-                        <th>Agama</th>
-                        <th>No. KTP</th>
-                        <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                            
-                        </tbody>
-                    </table>
+                        <table id="tb_keluar" class="table table-bordered table-hover text-nowrap">
+                            <thead>
+                            <tr>
+                            <th>Id</th>
+                            <th>Tanggal</th>
+                            <th>Nama</th>
+                            <th>Jumlah</th>
+                            <th>Keterangan</th>
+                            <th>Periode</th>
+                            <th>Closing</th>
+                            <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                
+                            </tbody>
+                        </table>
                     </div>
                     <!-- /.box-body -->
             </div>
@@ -76,11 +88,11 @@
     </section>
     <!-- /.content -->
 <!-- Modal -->
-<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="tambah_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalCenterTitle">Edit User</h5>
+        <h5 class="modal-title" id="exampleModalCenterTitle">Pengeluaran Kas</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -90,11 +102,11 @@
               @csrf
 
               <div class="form-group row">
-                  <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Nama</label>
+                  <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Tanggal</label>
 
                   <div class="col-md-6">
-                      <input type="hidden" id="id-edit" name="id-edit">
-                      <input id="edit-nama" type="text" class="form-control" name="edit-nama" value="{{ old('edit-nama') }}" required>
+                     
+                      <input id="tanggal" type="date" class="form-control" name="tanggal" required>
 
                       @error('edit-nama')
                             <span class="help-block" role="alert">
@@ -104,10 +116,15 @@
                   </div>
               </div>
               <div class="form-group row">
-                  <label for="harga" class="col-md-4 col-form-label text-md-right">{{ __('Harga') }}</label>
+                  <label for="harga" class="col-md-4 col-form-label text-md-right">{{ __('Jumlah') }}</label>
 
                   <div class="col-md-6">
-                      <input id="harga" type="number" class="form-control @error('harga') is-invalid @enderror" name="harga" value="{{ old('harga') }}" required autocomplete="harga" autofocus>
+                    <div class="input-group">
+                        <div class="input-group-addon">
+                          <i>Rp</i>
+                        </div>
+                        <input type="number" name="jumlah" id="jumlah" class="form-control" required>
+                      </div>
 
                       @error('harga')
                           <span class="invalid-feedback" role="alert">
@@ -117,21 +134,7 @@
                   </div>
               </div>
 
-              <div class="form-group row">
-                  <label for="bunga" class="col-md-4 col-form-label text-md-right">{{ __('Bunga Kredit') }}</label>
-
-                  <div class="col-md-3">
-                   
-                      <input id="bunga" type="number" class="form-control @error('bunga') is-invalid @enderror" name="bunga" value="{{ old('bunga') }}" required autocomplete="bunga" autofocus>
-                   
-                      @error('bunga')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
-                  </div>
-                  <label for="">%</label>
-              </div>
+              
 
               <div class="form-group row">
                   <label for="desk" class="col-md-4 col-form-label text-md-right">{{ __('Deskripsi') }}</label>
@@ -147,37 +150,10 @@
                       @enderror
                   </div>
               </div>
-
-              <div class="form-group row">
-                  <label for="desk" class="col-md-4 col-form-label text-md-right">{{ __('Gambar') }}</label>
-
-                  <div class="col-md-6">
-                  <input type="file" name="gambar" >
-                      
-
-                      @error('desk')
-                          <span class="invalid-feedback" role="alert">
-                              <strong>{{ $message }}</strong>
-                          </span>
-                      @enderror
-                  </div>
-              </div>
-              
-              <div class="form-group row">
-                  <label for="public" class="col-md-4 col-form-label text-md-right">{{ __('Post') }}</label>
-
-                  <div class="col-md-6">
-                    <div class="form-check form-check-inline">
-                        <input type="hidden" name= "public" value="FALSE">
-                        <input class="form-check-input @error('public') is-invalid @enderror" type="checkbox" name="public" id="public" value="TRUE">
-                        <label class="form-check-label" for="laki">Set Public</label>
-                    </div>
-                  </div>
-              </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" class="btn btn-primary">Save changes</button>
+        <button type="submit" class="btn btn-primary">Simpan</button>
       </div>
       </form>
     </div>
@@ -186,5 +162,63 @@
 @endsection
 
 @section('script')
+<script src="{{asset('assets/datatables.net/js/jquery.dataTables.min.js')}}"></script>
+<script src="{{asset('assets/datatables.net-bs/js/dataTables.bootstrap.min.js')}}"></script>
+<script type="text/javascript">
+$(document).ready(function(){
+    var key = localStorage.getItem('user_token');
+    var tb_keluar =   $('#tb_keluar').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        responsive: true,
+        ordering: false,
+        ajax: {
+                        url: APP_URL+'/api/listkeluar',
+                        type: "POST",
+                        headers: { "token_req": key },
+                        data: function(d){
+                            d.tgl_awal = $("#tgl-awal").val();
+                            d.tgl_akhir = $("#tgl-akhir").val();
+                        }
+                        
+                    },
+        columnDefs:[
+            {
+                targets: [ 0, 6],
+                visible: false,
+                searchable: false
+            },
+            {
+              targets: [7],
+              data: null,
+              //defaultContent: "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
+              render: function(data , type, row, meta){
+                                  if (data.tgl_closing != null){
+                                    return "";
+                                  }else{
+                                    return "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>";
 
+                                  }
+                                }
+            }
+        ],
+       
+        columns: [
+            { data: 'id_keluar', name: 'id_keluar' },
+            { data: 'tgl_keluar', name: 'tgl_keluar' },
+            { data: 'nama', name: 'nama' },
+            { data: 'jumlah', name: 'jumlah' },
+            { data: 'keterangan', name: 'keterangan' },
+            { data: 'periode', name: 'periode' },
+            { data: 'tgl_closing', name: 'tgl_closing' },
+        ]
+    });
+
+    $("#btn_tmbh").click(function(){
+        $("#tambah_modal").modal("show");
+    });
+
+});
+</script>
 @endsection

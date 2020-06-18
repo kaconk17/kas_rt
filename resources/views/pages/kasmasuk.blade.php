@@ -359,7 +359,7 @@ $(document).ready(function(){
     })
     .done(function(resp) {
         if (resp.success) {
-	       alert(resp.message);
+	       //alert(resp.message);
 			window.location.href = "{{ route('masuk')}}";
         }
         else

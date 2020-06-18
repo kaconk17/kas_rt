@@ -98,9 +98,17 @@
         </button>
       </div>
       <div class="modal-body">
-      <form method="POST" action="{{ url('/postkredit') }}">
+      <form method="POST" id="form_tambah">
               @csrf
+              <div class="form-group row">
+                <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Saldo</label>
 
+                <div class="col-md-6">
+                   
+                <label>Rp {{number_format($saldo)}}</label>
+
+                </div>
+            </div>
               <div class="form-group row">
                   <label for="edit-nama" class="col-md-4 col-form-label text-md-right">Tanggal</label>
 
@@ -134,7 +142,19 @@
                   </div>
               </div>
 
-              
+              <div class="form-group row">
+                <label for="harga" class="col-md-4 col-form-label text-md-right">{{ __('Periode') }}</label>
+
+                <div class="col-md-6">
+                    <input type="month" name="periode" class="form-control" id="periode" required>
+
+                    @error('harga')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            </div>
 
               <div class="form-group row">
                   <label for="desk" class="col-md-4 col-form-label text-md-right">{{ __('Deskripsi') }}</label>
@@ -217,6 +237,41 @@ $(document).ready(function(){
 
     $("#btn_tmbh").click(function(){
         $("#tambah_modal").modal("show");
+    });
+
+    $("#form_tambah").submit(function(e){
+        e.preventDefault();
+        var datas = $(this).serialize();
+        var btn = $("#btn-save");
+        btn.html('Simpan');
+        btn.attr('disabled', true);
+
+        $.ajax({
+        url: APP_URL+'/kas/postkeluar',
+        type: 'POST',
+        dataType: 'json',
+        data: datas,
+            })
+            .done(function(resp) {
+                if (resp.success) {
+                //alert(resp.message);
+                    window.location.href = "{{ route('keluar')}}";
+                }
+                else
+                alert(resp.message);
+                //$("#error").html("<div class='alert alert-danger'><div>Error</div></div>");
+            })
+            .fail(function() {
+                $("#error").html("<div class='alert alert-danger'><div>Tidak dapat terhubung ke server !!!</div></div>");
+                //toastr['warning']('Tidak dapat terhubung ke server !!!');
+            })
+            .always(function() {
+                btn.html('Simpan');
+                btn.attr('disabled', false);
+            });
+            
+            return false;
+           
     });
 
 });

@@ -32,8 +32,9 @@ Route::group(['middleware' => ['protect:admin']], function () {
     Route::post('/user/delete', 'UserController@delete');
     Route::post('/user/passupdate', 'UserController@passupdate');
     Route::get('/kas/masuk', 'PageController@kasmasuk')->name('masuk');
-    Route::get('/kas/keluar', 'PageController@kaskeluar');
+    Route::get('/kas/keluar', 'PageController@kaskeluar')->name('keluar');
     Route::post('/masuk/edit', 'KasController@edit_masuk');
     Route::post('/kas/postmasuk', 'KasController@postmasuk');
+    Route::post('/kas/postkeluar', 'KasController@postkeluar');
 });
 

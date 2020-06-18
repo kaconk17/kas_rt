@@ -6,13 +6,17 @@ use Illuminate\Http\Request;
 use App\User;
 use App\masuk;
 use App\transaksi;
+use App\keluar;
 use App\LogModel;
+use App\Traits\KasTransaction;
+
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\DB;
 
 class KasController extends Controller
 {
+    use KasTransaction;
    public function postmasuk(Request $request){
      
        $id = Str::uuid();
@@ -38,12 +42,14 @@ class KasController extends Controller
                 'periode'=>$request['periode'],
                 'keterangan'=>$request['keterangan'],
             ]);
+            Session::flash('alert-success','Simpan Data gagal !'); 
         return array(
             
             'message' => 'Simpan Data Berhasil!',
             'success'=>true
         );
        }else{
+        Session::flash('alert-danger','Simpan Data gagal !'); 
         return array(
             
             'message' => 'Simpan Data Gagal!',
@@ -162,4 +168,55 @@ class KasController extends Controller
         "data" => $Datas
     ];
    }
+
+   public function postkeluar(Request $request){
+   
+       $s = $this->getSaldo($request['tanggal']);
+        //dd($s);
+        $user_id = Session::get('id');
+        $id = Str::uuid();
+        if ($s['saldo'] - $request['jumlah'] < 0) {
+            Session::flash('alert-danger','Saldo tidak mencukupi !'); 
+            return array(
+                
+                'message' => 'Saldo tidak mencukupi !',
+                'success'=>false
+            );
+        }
+        $insert = keluar::create([
+            'id_keluar'=> $id,
+            'id_input' => $user_id,
+            'tgl_keluar' => $request['tanggal'],
+            'jumlah'=> $request['jumlah'],
+            'periode'=> $request['periode'],
+            'keterangan'=> $request['desk'],
+           
+        ]);
+        if ($insert) {
+            $trans = transaksi::create([
+                'id_record'=>Str::uuid(),
+                'id_keluar'=>$id,
+                'jenis'=>'pengeluaran',
+                'tgl_transaksi'=>$request['tanggal'],
+                'jumlah'=>$request['jumlah'],
+                'periode'=>$request['periode'],
+                'keterangan'=>$request['desk'],
+            ]);
+            Session::flash('alert-success','Simpan Data berhasil !'); 
+            return array(
+            
+                'message' => 'Simpan Data Berhasil!',
+                'success'=>true
+            );
+        }else{
+            Session::flash('alert-danger','Simpan Data gagal !'); 
+            return array(
+                
+                'message' => 'Simpan Data Gagal!',
+                'success'=>false
+            );
+           }
+   }
+
+   
 }

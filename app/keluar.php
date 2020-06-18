@@ -13,6 +13,7 @@ class keluar extends Model
         'jumlah',
         'periode',
         'keterangan',
+        'tgl_closing',
         
     ];
 

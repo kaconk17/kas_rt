@@ -4,12 +4,17 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\User;
+use App\Traits\KasTransaction;
 use Illuminate\Support\Facades\Session;
 
 class PageController extends Controller
 {
+    use KasTransaction;
+
    public function home(){
-       return view('pages.home');
+    $s = $this->getSaldo(date('Y-m-d'));
+
+       return view('pages.home',["saldo"=>$s['saldo'], "awal"=>$s['awal'], "masuk"=>$s['masuk'], "keluar"=>$s['keluar']]);
    }
 
    public function login(){
@@ -43,6 +48,9 @@ class PageController extends Controller
   }
 
   public function kaskeluar(){
-    return view('pages.kaskeluar');
+
+    $s = $this->getSaldo(date('Y-m-d'));
+   
+    return view('pages.kaskeluar',['saldo'=>$s['saldo']]);
 }
 }

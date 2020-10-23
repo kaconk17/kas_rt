@@ -81,7 +81,7 @@ class KasController extends Controller
 
    public function delete_masuk(Request $request){
         $id = $request['id'];
-        $token = $request->header('token_req');
+        $token = apache_request_headers();
 
         $user = User::where('api_token',base64_decode($token))->first();
 

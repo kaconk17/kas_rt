@@ -17,7 +17,8 @@ class ApiToken
     public function handle($request, Closure $next)
     {
         $token = apache_request_headers();
-      $user = User::where('api_token',base64_decode($token['token_req']))->first();
+       
+      $user = User::where('api_token',base64_decode($token['tokenreq']))->first();
         if($user){
             return $next($request);
           }

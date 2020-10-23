@@ -196,7 +196,7 @@ $(document).ready(function(){
         ajax: {
                         url: APP_URL+'/api/listkeluar',
                         type: "POST",
-                        headers: { "token_req": key },
+                        headers: { "tokenreq": key },
                         data: function(d){
                             d.tgl_awal = $("#tgl-awal").val();
                             d.tgl_akhir = $("#tgl-akhir").val();

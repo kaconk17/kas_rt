@@ -200,7 +200,7 @@ $(document).ready(function(){
         ajax: {
                         url: APP_URL+'/api/list_user',
                         type: "POST",
-                        headers: { "token_req": key },
+                        headers: { "tokenreq": key },
                         
                     },
         columnDefs:[

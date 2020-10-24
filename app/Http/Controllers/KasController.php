@@ -83,7 +83,7 @@ class KasController extends Controller
         $id = $request['id'];
         $token = apache_request_headers();
 
-        $user = User::where('api_token',base64_decode($token['tokenreq']))->first();
+        $user = User::where('api_token',base64_decode($token['X-API-Key']))->first();
 
         if($user->level == 'admin'){
             $masuk = masuk::find($id);

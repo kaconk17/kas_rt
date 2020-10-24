@@ -265,7 +265,7 @@ $(document).ready(function(){
         ajax: {
                         url: APP_URL+'/api/listiuran',
                         type: "POST",
-                        headers: { "tokenreq": key },
+                        headers: { "X-API-Key": key },
                         data: function(d){
                             d.tgl_awal = $("#tgl-awal").val();
                             d.tgl_akhir = $("#tgl-akhir").val();
@@ -407,7 +407,7 @@ function action_data(link_url, datas, key){
         url: link_url,
         type: 'POST',
         dataType: 'json',
-        headers : { "tokenreq": key },
+        headers: { "X-API-Key": key },
         data: datas,
     });
 }

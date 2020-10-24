@@ -203,9 +203,7 @@ $(document).ready(function(){
                         headers: { "X-API-Key": key },
                         
                     },
-                    //beforeSend: function (xhr) {
-                    //    xhr.setRequestHeader("Authorization","Bearer " + key);
-                    //},
+                   
         columnDefs:[
             {
                 targets: [ 0 ],

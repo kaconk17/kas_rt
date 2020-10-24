@@ -81,9 +81,9 @@ class KasController extends Controller
 
    public function delete_masuk(Request $request){
         $id = $request['id'];
-        $token = apache_request_headers();
-
-        $user = User::where('api_token',base64_decode($token['X-API-Key']))->first();
+        //$token = apache_request_headers();
+        $token = $request->header('X-API-Key');
+        $user = User::where('api_token',base64_decode($token))->first();
 
         if($user->level == 'admin'){
             $masuk = masuk::find($id);

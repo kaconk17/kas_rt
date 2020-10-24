@@ -200,9 +200,12 @@ $(document).ready(function(){
         ajax: {
                         url: APP_URL+'/api/list_user',
                         type: "POST",
-                        headers: { "tokenreq": key },
+                        headers: { "X-API-Key": key },
                         
                     },
+                    //beforeSend: function (xhr) {
+                    //    xhr.setRequestHeader("Authorization","Bearer " + key);
+                    //},
         columnDefs:[
             {
                 targets: [ 0 ],

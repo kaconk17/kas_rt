@@ -179,6 +179,62 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="edit_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLongTitle">Edit Keluar</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+        <form id="form_edit" method="POST">
+           @csrf
+           
+            
+            <div class="row form-group">
+                <div class="col col-md-3"><label>Tanggal :</label></div>
+                <input type="hidden" id="edit_id" name="edit_id">
+              <div class="col col-md-4">
+                <label id="tgl_edit"></label>
+              </div>
+            </div>
+           
+            
+            <div class="row form-group">
+              <div class="col col-md-3"><label>Jumlah :</label></div>
+              <div class="col col-md-4">
+                  <div class="input-group">
+                    <div class="input-group-addon">
+                      <i>Rp</i>
+                    </div>
+                    <input type="number" name="edit_jumlah" id="edit_jumlah" class="form-control" required>
+                  </div>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col col-md-3"><label>Periode :</label></div>
+              <div class="col col-md-4">
+                 <label id="edit_periode"></label>
+              </div>
+            </div>
+            <div class="row form-group">
+              <div class="col col-md-3"><label>Deskripsi :</label></div>
+              <div class="col col-md-6">
+               <textarea class="form-control" name="edit_keterangan" id="edit_keterangan" cols="30" rows="5" placeholder="Keterangan"></textarea>
+              </div>
+            </div>
+       </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="btn-update">Update</button>
+        </div>
+      </div>
+      </form>
+    </div>
+  </div>
 @endsection
 
 @section('script')
@@ -239,6 +295,35 @@ $(document).ready(function(){
         $("#tambah_modal").modal("show");
     });
 
+    $("#tb_keluar").on('click','.btn-success',function(){
+      var data = tb_keluar.row( $(this).parents('tr') ).data();
+      $("#edit_id").val(data.id_keluar)
+      $("#tgl_edit").html(data.tgl_keluar);
+      $("#edit_jumlah").val(data.jumlah);
+      $("#edit_periode").html(data.periode);
+      $("#edit_keterangan").html(data.keterangan);
+     
+      $("#edit_modal").modal("show");
+    });
+
+    $("#tb_keluar").on('click','.btn-danger',function(){
+      var data = tb_keluar.row( $(this).parents('tr') ).data();
+      var t = confirm("Apakah anda akan menghapus pengeluaran "+data.jumlah+" ?");
+      if (t) {
+        var d = {"id":data.id_keluar};
+        action_data(APP_URL+"/api/keluar/delete",d,key).done(function(resp){
+          if (resp.success) {
+            alert(resp.message);
+            window.location.href = "{{ route('keluar')}}";
+          }else{
+            alert(resp.message);
+          }
+        }).fail(function(){
+
+        });
+      }
+    });
+
     $("#form_tambah").submit(function(e){
         e.preventDefault();
         var datas = $(this).serialize();
@@ -274,6 +359,38 @@ $(document).ready(function(){
            
     });
 
+    $("#form_edit").submit(function(e){
+        e.preventDefault();
+        
+        
+        var d = $(this).serialize();
+        var btn = $("#btn-update");
+        var _key = localStorage.getItem('user_token');
+        btn.html('Update');
+        btn.attr('disabled', true);
+        action_data(APP_URL+"/keluar/edit", d, _key).done(function(resp){
+                if (resp.success) {
+                    alert(resp.message);
+                    window.location.href = "{{ route('keluar')}}";
+                }else{
+                    alert(resp.message);
+                }
+                }).fail(function(){
+
+                });
+                
+        });
+
 });
+
+function action_data(link_url, datas, key){
+  return $.ajax({
+        url: link_url,
+        type: 'POST',
+        dataType: 'json',
+        headers: { "X-API-Key": key },
+        data: datas,
+    });
+}
 </script>
 @endsection

@@ -36,5 +36,6 @@ Route::group(['middleware' => ['protect:admin']], function () {
     Route::post('/masuk/edit', 'KasController@edit_masuk');
     Route::post('/kas/postmasuk', 'KasController@postmasuk');
     Route::post('/kas/postkeluar', 'KasController@postkeluar');
+    Route::post('/keluar/edit', 'KasController@edit_keluar');
 });
 

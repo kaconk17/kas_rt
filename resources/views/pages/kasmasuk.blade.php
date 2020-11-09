@@ -281,7 +281,7 @@ $(document).ready(function(){
             {
               targets: [9],
               data: null,
-              //defaultContent: "<button class='btn btn-success'><i class='fa fa-edit'></i></button><button class='btn btn-danger'><i class='fa fa-trash'></i></button>"
+              
               render: function(data , type, row, meta){
                                   if (data.tgl_closing != null){
                                     return "";

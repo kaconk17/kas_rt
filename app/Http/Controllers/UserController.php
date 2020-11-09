@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
+use App\LogModel;
 
 class UserController extends Controller
 {
@@ -90,6 +91,14 @@ class UserController extends Controller
         if ($user->isDirty()) {
            
             $user->save();
+            $message ="edit: user, ID : ".$request['id'];
+            $data = [
+                'id_log' => Str::uuid(),
+                'id_user' => Session::get('id'),
+                'activity' =>"edit",
+                'message' => $message,
+            ];
+        LogModel::create($data);
             Session::flash('alert-success','Update berhasil !'); 
         }else{
             Session::flash('alert-danger','Data tidak diupdate !'); 
@@ -149,11 +158,20 @@ class UserController extends Controller
    }
 
    public function delete(Request $request){
+
         $user = User::find($request['id'])->delete();
 
         if ($user) {
            $pesan = 'Hapus Data Berhasil !';
            $res = true;
+           $message ="delete: user, ID : ".$request['id'];
+           $data = [
+            'id_log' => Str::uuid(),
+            'id_user' => Session::get('id'),
+            'activity' =>"delete",
+            'message' => $message,
+        ];
+        LogModel::create($data);
         }else{
             $pesan = 'Hapus Data Gagal !';
            $res = false;

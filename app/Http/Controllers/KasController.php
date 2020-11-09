@@ -93,9 +93,17 @@ class KasController extends Controller
                 $status = false;
             }else{
 
+                $message ="delete: kas_masuk, ID : ".$masuk->id_masuk;
                 $masuk->delete();
                 $mess = 'Hapus data berhasil !';
                 $status = true;
+                $data = [
+                    'id_log' => Str::uuid(),
+                    'id_user' => $user->id,
+                    'activity' =>"delete",
+                    'message' => $message,
+                ];
+                LogModel::create($data);
             }
         }else{
             $mess = 'Hapus data gagal !';
@@ -112,7 +120,8 @@ class KasController extends Controller
         $id = Session::get('id');
         $user = User::find($id);
         $kas = masuk::find($request['edit_id']);
-
+        $trans = transaksi::where('id_masuk',$kas->id_masuk)->first();
+       
         if ($user->level == 'admin' && $kas->tgl_closing == null) {
            $kas->jenis = $request['edit_jenis'];
            $kas->jumlah = $request['edit_jumlah'];
@@ -120,14 +129,18 @@ class KasController extends Controller
            $message ="update: kas_masuk, ID : ".$request['edit_id'];
            if ($kas->isDirty('jenis')) {
                $message = $message.",jenis: ".$request['edit_jenis'];
+               $trans->jenis = $request['edit_jenis'];
            }
            if ($kas->isDirty('jumlah')) {
             $message = $message.",jumlah: ".$request['edit_jumlah'];
+            $trans->jumlah = $request['edit_jumlah'];
            }
            if ($kas->isDirty('keterangan')) {
             $message = $message.",keterangan: ".$request['edit_keterangan'];
+            $trans->keterangan = $request['edit_keterangan'];
            }
            $kas->save();
+           $trans->save();
            $mess = 'Edit data berhasil !';
             $status = true;
             $data = [
@@ -217,6 +230,92 @@ class KasController extends Controller
             );
            }
    }
+
+   public function edit_keluar(Request $request){
+      
+    $id = Session::get('id');
+    $user = User::find($id);
+    $kas = keluar::find($request['edit_id']);
+    $trans = transaksi::where('id_keluar',$kas->id_keluar)->first();
+
+    $s = $this->getSaldo($kas->tgl_keluar);
+
+    if (($s['saldo'] + $kas->jumlah) - $request['edit_jumlah'] < 0) {
+        return array(
+            'message' => 'Saldo tidak mencukupi !',
+            'success'=>false
+        );
+    }
+   
+    if ($user->level == 'admin' && $kas->tgl_closing == null) {
+       
+       $kas->jumlah = $request['edit_jumlah'];
+       $kas->keterangan = $request['edit_keterangan'];
+       $message ="update: kas_keluar, ID : ".$request['edit_id'];
+
+       if ($kas->isDirty('jumlah')) {
+        $message = $message.",jumlah: ".$request['edit_jumlah'];
+        $trans->jumlah = $request['edit_jumlah'];
+       }
+       if ($kas->isDirty('keterangan')) {
+        $message = $message.",keterangan: ".$request['edit_keterangan'];
+        $trans->keterangan = $request['edit_keterangan'];
+       }
+       $kas->save();
+       $trans->save();
+       $mess = 'Edit data berhasil !';
+        $status = true;
+        $data = [
+            'id_log' => Str::uuid(),
+            'id_user' => $id,
+            'activity' =>"update",
+            'message' => $message,
+        ];
+        LogModel::create($data);
+    }else{
+        $mess = 'Edit data gagal !';
+        $status = false;
+    }
+    return array(
+        'message' => $mess,
+        'success'=>$status
+    );
+}
+
+public function delete_keluar(Request $request){
+    $id = $request['id'];
+    $token = $request->header('X-API-Key');
+    $user = User::where('api_token',base64_decode($token))->first();
+
+    if($user->level == 'admin'){
+        $keluar = keluar::find($id);
+        if($keluar->tgl_closing != null){
+           
+            $mess = 'Hapus data gagal !';
+            $status = false;
+        }else{
+
+            $message ="delete: kas_keluar, ID : ".$keluar->id_keluar;
+            $keluar->delete();
+            $mess = 'Hapus data berhasil !';
+            $status = true;
+            $data = [
+                'id_log' => Str::uuid(),
+                'id_user' => $user->id,
+                'activity' =>"delete",
+                'message' => $message,
+            ];
+            LogModel::create($data);
+        }
+    }else{
+        $mess = 'Hapus data gagal !';
+        $status = false;
+    }
+    return array(
+        'message' => $mess,
+        'success'=>$status
+    );
+}
 
    
 }

@@ -23,4 +23,5 @@ Route::middleware('ApiToken')->group(function () {
     Route::post('/kas/postmasuk', 'KasController@postmasuk');
     Route::post('/masuk/delete', 'KasController@delete_masuk');
     Route::post('/listkeluar', 'KasController@listkeluar');
+    Route::post('/keluar/delete', 'KasController@delete_keluar');
 });

@@ -298,7 +298,7 @@ $(document).ready(function(){
             { data: 'tgl_bayar', name: 'tgl_bayar' },
             { data: 'nama', name: 'nama' },
             { data: 'jenis', name: 'jenis' },
-            { data: 'jumlah', name: 'jumlah' },
+            { data: 'jumlah', name: 'jumlah', render: $.fn.dataTable.render.number(',', '.', 2, 'Rp') },
             { data: 'periode', name: 'periode' },
             { data: 'nama_input', name: 'nama_input' },
             { data: 'keterangan', name: 'keterangan' },

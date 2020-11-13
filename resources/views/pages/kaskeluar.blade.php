@@ -284,7 +284,7 @@ $(document).ready(function(){
             { data: 'id_keluar', name: 'id_keluar' },
             { data: 'tgl_keluar', name: 'tgl_keluar' },
             { data: 'nama', name: 'nama' },
-            { data: 'jumlah', name: 'jumlah' },
+            { data: 'jumlah', name: 'jumlah', render: $.fn.dataTable.render.number(',', '.', 2, 'Rp') },
             { data: 'keterangan', name: 'keterangan' },
             { data: 'periode', name: 'periode' },
             { data: 'tgl_closing', name: 'tgl_closing' },

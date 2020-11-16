@@ -18,6 +18,10 @@ class PageController extends Controller
    }
 
    public function login(){
+
+       if (Session::get('login') == True) {
+            return redirect()->route('home');
+       }
        return view('pages.login');
    }
 

@@ -17,3 +17,4 @@ yarn-error.log
 .AppleDouble
 .LSOverride
 
+/config/database.php

@@ -42,49 +42,7 @@
         <ul class="nav navbar-nav">
          
           
-          <!-- Notifications: style can be found in dropdown.less -->
-          <li class="dropdown notifications-menu">
-            <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-              <i class="fa fa-bell-o"></i>
-              <span class="label label-warning">10</span>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="header">You have 10 notifications</li>
-              <li>
-                <!-- inner menu: contains the actual data -->
-                <ul class="menu">
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-aqua"></i> 5 new members joined today
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-warning text-yellow"></i> Very long description here that may not fit into the
-                      page and may cause design problems
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-users text-red"></i> 5 new members joined
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-shopping-cart text-green"></i> 25 sales made
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      <i class="fa fa-user text-red"></i> You changed your username
-                    </a>
-                  </li>
-                </ul>
-              </li>
-              <li class="footer"><a href="#">View all</a></li>
-            </ul>
-          </li>
-         
+        
           <!-- User Account: style can be found in dropdown.less -->
           <li class="dropdown user user-menu">
             <a href="#" class="dropdown-toggle" data-toggle="dropdown">
@@ -160,16 +118,11 @@
           <ul class="treeview-menu">
             <li class="{{ Request::is('kas/masuk') ? 'active' : '' }}"><a href="{{url('/kas/masuk')}}"><i class="fa fa-plus"></i> Kas Masuk</a></li>
             <li class="{{ Request::is('kas/keluar') ? 'active' : '' }}"><a href="{{url('/kas/keluar')}}"><i class="fa fa-cart-plus"></i> Kas Keluar</a></li>
-            <li class="{{ Request::is('kas/laporan') ? 'active' : '' }}"><a href="#"><i class="fa fa-bar-chart"></i> Laporan Kas</a></li>
+            <li class="{{ Request::is('kas/laporan') ? 'active' : '' }}"><a href="{{url('/kas/laporan')}}"><i class="fa fa-bar-chart"></i> Laporan Kas</a></li>
           </ul>
         </li>
        
-        <li class="treeview">
-          <a href="pages/calendar.html">
-            <i class="fa fa-calendar"></i> <span>Calendar</span>
-           
-          </a>
-        </li>
+       
         @if (Session::get('level')=='admin')
         <li class="{{ Request::is('user') ? 'active' : '' }}">
           <a href="{{url('/user')}}">

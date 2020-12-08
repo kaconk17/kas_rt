@@ -57,4 +57,7 @@ class PageController extends Controller
    
     return view('pages.kaskeluar',['saldo'=>$s['saldo']]);
 }
+public function laporan(){
+    return view('pages.laporan');
+}
 }

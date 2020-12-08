@@ -8,6 +8,7 @@ use App\masuk;
 use App\transaksi;
 use App\keluar;
 use App\LogModel;
+use App\laporan;
 use App\Traits\KasTransaction;
 
 use Illuminate\Support\Str;
@@ -17,10 +18,26 @@ use Illuminate\Support\Facades\DB;
 class KasController extends Controller
 {
     use KasTransaction;
+    public function cekClose($period){
+        $cek = laporan::where('periode','=',$period)->count();
+        if ($cek > 0) {
+            return true;
+        }else{
+            return false;
+        }
+    }
    public function postmasuk(Request $request){
      
        $id = Str::uuid();
-        
+        $cek = $this->cekClose($request['periode']);
+        if ($cek) {
+            Session::flash('alert-danger','Simpan Data gagal !'); 
+        return array(
+            
+            'message' => 'Simpan Data Gagal!',
+            'success'=>false
+        );
+        }
        $masuk = masuk::create([
             'id_masuk'=>$id,
             'id_input'=>Session::get('id'),
@@ -196,6 +213,15 @@ class KasController extends Controller
                 'success'=>false
             );
         }
+        $cek = $this->cekClose($request['periode']);
+        if ($cek) {
+            Session::flash('alert-danger','Simpan Data gagal !'); 
+        return array(
+            
+            'message' => 'Simpan Data Gagal!',
+            'success'=>false
+        );
+        }
         $insert = keluar::create([
             'id_keluar'=> $id,
             'id_input' => $user_id,
@@ -315,6 +341,26 @@ public function delete_keluar(Request $request){
         'message' => $mess,
         'success'=>$status
     );
+}
+public function listtrans(Request $request){
+    
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
+    $awal = $request->input("tgl_awal");
+    $akhir = $request->input("tgl_akhir");
+
+    $Datas = DB::select("select * from transaksi WHERE tgl_transaksi >= '$awal' and tgl_transaksi <= '$akhir'");
+
+    $rows = DB::select("select * from transaksi WHERE tgl_transaksi >= '$awal' and tgl_transaksi <= '$akhir'");
+    $count = count($rows);
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
 }
 
    

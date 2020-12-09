@@ -13,6 +13,7 @@
   <!-- Ionicons -->
   <link rel="stylesheet" href="{{asset('assets/ionicons/css/ionicons.min.css')}}">
   <!-- Theme style -->
+  <link rel="stylesheet" href="{{asset('assets/chartjs/Chart.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/LTE/css/AdminLTE.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/LTE/css/skin-black.min.css')}}">
   <link rel="stylesheet" href="{{asset('assets/datatables.net-bs/css/dataTables.bootstrap.min.css')}}">

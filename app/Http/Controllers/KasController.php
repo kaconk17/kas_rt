@@ -10,6 +10,7 @@ use App\keluar;
 use App\LogModel;
 use App\laporan;
 use App\Traits\KasTransaction;
+use Carbon\Carbon;
 
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
@@ -362,6 +363,89 @@ public function listtrans(Request $request){
         "data" => $Datas
     ];
 }
+public function listbulanan(Request $request){
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
 
+    $Datas = DB::select("select * from laporan order by tgl_laporan asc");
+
+    $rows = DB::select("select * from laporan order by tgl_laporan asc");
+    $count = count($rows);
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
+}
+
+public function savelaporan(Request $request){
+    $token = $request->header('X-API-Key');
+   
+    $periode = $request['periode'];
+    $tanggal = $periode.'-01';
+    $akhir = Carbon::create($tanggal)->endOfMonth()->format('Y-m-d');
+    $user = User::where('api_token',base64_decode($token))->first();
+    $cek = laporan::where('periode',$periode)->count();
+    $s = $this->getSaldo($akhir);
+    if ($user->level == 'admin') {
+        if ($cek > 0) {
+            return array(
+                'message' => 'Periode sudah ada !',
+                'success'=>false
+            );
+        }
+       laporan::create([
+            'id_laporan'=>Str::uuid(),
+            'tgl_laporan'=> Date('Y-m-d'),
+            'id_input'=> $user->id,
+            'periode'=> $periode,
+            'saldo_awal'=> $s['awal'],
+            'total_masuk'=> $s['masuk'],
+            'total_keluar'=> $s['keluar'],
+            'saldo_akhir'=> $s['saldo'],
+       ]);
+       masuk::where('periode',$periode)->update(['tgl_closing'=>Date('Y-m-d')]);
+       keluar::where('periode',$periode)->update(['tgl_closing'=>Date('Y-m-d')]);
+       $data = [
+        'id_log' => Str::uuid(),
+        'id_user' => $user->id,
+        'activity' =>"create",
+        'message' => "laporan periode:".$periode,
+    ];
+    LogModel::create($data);
+       return array(
+        'message' => 'Simpan Data berhasil !',
+        'success'=>true
+    );
+    }
+    return array(
+        'message' => 'Simpan Data gagal !',
+        'success'=>false
+    );
+}
+public function grafik(Request $request){
+    $awal = $request['tgl_awal'];
+    $akhir = $request['tgl_akhir'];
+    $beg = $this->getSaldo($akhir);
+    $masuk = DB::select("select sum(jumlah) as jumlah from transaksi where id_masuk is not null and tgl_transaksi >= '$awal' and tgl_transaksi <= '$akhir'")[0]->jumlah;
+     if (!$masuk) {
+        $masuk = 0;
+     }
+     $keluar = DB::select("select sum(jumlah) as jumlah from transaksi where id_keluar is not null and tgl_transaksi >= '$awal' and tgl_transaksi <= '$akhir'")[0]->jumlah;
+     if (!$keluar) {
+        $keluar = 0;
+     }
+     $end = ($beg['awal'] + $masuk) - $keluar;
+     return array(
+        'awal' => $beg['awal'],
+        'in'=>$masuk,
+        'out'=> $keluar,
+        'end'=> $end
+    );
+
+}
    
 }

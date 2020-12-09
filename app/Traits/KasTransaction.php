@@ -11,10 +11,13 @@ trait KasTransaction{
         $periode = $p->format('Y-m');
         $awal = $p->add(-1,'month')->format('Y-m');
         $awal1 = $periode."-01";
-     
+    
      $saldo_awal = DB::select("select saldo_akhir from laporan where periode = '$awal'");
+
      if (!$saldo_awal) {
-        $saldo_awal = 0;
+        $beg = 0;
+     }else{
+         $beg = $saldo_awal[0]->saldo_akhir;
      }
      /*
      $masuk1 = DB::select("select sum(jumlah) as jumlah from transaksi where id_masuk is not null and tgl_transaksi < '$tgl1' and tgl_transaksi >= '$awal1'")[0]->jumlah;
@@ -35,9 +38,9 @@ trait KasTransaction{
         $keluar = 0;
      }
  
-     $saldo = $saldo_awal+ $masuk - $keluar;
+     $saldo = ($beg+ $masuk) - $keluar;
      return array(
-         "awal"=> $saldo_awal,
+         "awal"=> $beg,
          "masuk" => $masuk,
          "keluar" => $keluar,
          "saldo" => $saldo,

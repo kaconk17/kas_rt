@@ -362,6 +362,22 @@ public function listtrans(Request $request){
         "data" => $Datas
     ];
 }
+public function listbulanan(Request $request){
+    $draw = $request->input("draw");
+    $search = $request->input("search")['value'];
+    $start = (int) $request->input("start");
+    $length = (int) $request->input("length");
 
+    $Datas = DB::select("select * from laporan order by tgl_laporan asc");
+
+    $rows = DB::select("select * from laporan order by tgl_laporan asc");
+    $count = count($rows);
+    return  [
+        "draw" => $draw,
+        "recordsTotal" => $count,
+        "recordsFiltered" => $count,
+        "data" => $Datas
+    ];
+}
    
 }

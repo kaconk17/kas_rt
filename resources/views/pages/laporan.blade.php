@@ -105,7 +105,7 @@
 <script type="text/javascript">
     $(document).ready(function(){
         var key = localStorage.getItem('user_token');
-        var tb_lapor =   $('#tb_laporan').DataTable({
+        var tb_trans =   $('#tb_laporan').DataTable({
             processing: true,
             serverSide: true,
             searching: true,
@@ -144,6 +144,37 @@
             var date1 = $("#tgl-awal").val();
             var date2 = $("#tgl-akhir").val();
             tb_lapor.ajax.reload();
+        });
+        var tb_lapor =   $('#tb_bulanan').DataTable({
+            processing: true,
+            serverSide: true,
+            searching: true,
+            responsive: true,
+            ordering: false,
+            ajax: {
+                            url: APP_URL+'/api/listbulanan',
+                            type: "POST",
+                            headers: { "X-API-Key": key },
+                        },
+            columnDefs:[
+                {
+                    targets: [ 0],
+                    visible: false,
+                    searchable: false
+                },
+                
+            ],
+        
+            columns: [
+                { data: 'id_laporan', name: 'id_laporan' },
+                { data: 'tgl_laporan', name: 'tgl_laporan' },
+                { data: 'periode', name: 'periode' },
+                { data: 'saldo_awal', name: 'saldo_awal',render: $.fn.dataTable.render.number(',', '.', 2, 'Rp')},
+                { data: 'total_masuk', name: 'total_masuk',render: $.fn.dataTable.render.number(',', '.', 2, 'Rp')},
+                { data: 'total_keluar', name: 'total_keluar',render: $.fn.dataTable.render.number(',', '.', 2, 'Rp')},
+                { data: 'saldo_akhir', name: 'saldo_akhir',render: $.fn.dataTable.render.number(',', '.', 2, 'Rp')},
+                { data: 'keterangan', name: 'keterangan' },
+            ]
         });
     });
 </script>
